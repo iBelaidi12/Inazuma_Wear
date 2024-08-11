@@ -3,6 +3,8 @@
 require('dotenv').config()
 
 const express = require('express')
+const mongoose = require('mongoose')
+
 
 const app = express()
 
@@ -17,7 +19,13 @@ app.use((req, res, next) => {
 })
 
 
-//Listen for requests
-app.listen(process.env.PORT, () => {
-    console.log('Listening on port 4000')
-})
+//Connect to db & Listen for requests
+mongoose.connect(process.env.MONG_URI)
+    .then(() => {
+        app.listen(process.env.PORT, () => {
+            console.log('Connected to db & Listening on port 4000')
+        })
+    })
+    .catch((error) => {
+        console.log(error)
+    })
