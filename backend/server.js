@@ -4,12 +4,11 @@ require('dotenv').config()
 
 const express = require('express')
 const mongoose = require('mongoose')
-
+const productRoutes = require('./routes/product')
 
 const app = express()
 
-//middleware acts between the req and the resp
-
+//Middleware acts between the req and the resp
 //Checks if theres a body to the request => Attaches it to the request object => We can access it in the req handler
 app.use(express.json())
 
@@ -18,6 +17,9 @@ app.use((req, res, next) => {
     next()
 })
 
+//Attaching productRoutes to the app
+//When a req is made to the 1st argument => use productRoutes
+app.use('/api/product/', productRoutes)
 
 //Connect to db & Listen for requests
 mongoose.connect(process.env.MONG_URI)
