@@ -4,6 +4,8 @@ const {
     getProducts,
     getOneProduct,
     addProduct,
+    deleteProduct,
+    updateProduct,
 } = require('../controllers/ProductController')
 
 
@@ -22,6 +24,11 @@ router.get('/:id', getOneProduct)
 //POST a new workout
 router.post('/', addProduct)
 
+//DELETE a product
+router.delete('/:id', deleteProduct)
+
+//UPDATE a product
+router.patch('/:id', updateProduct)
 
 //Exporting the router
 module.exports = router

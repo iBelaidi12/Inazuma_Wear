@@ -33,6 +33,32 @@ const getOneProduct = async (req, res) => {
 const addProduct = async (req, res) => {
     const {title, type, color, size, price, sale, stock} = req.body
 
+    let emptyFields = []
+    if(!title){
+        emptyFields.push('title')
+    }
+    if(!type){
+        emptyFields.push('type')
+    }
+    if(!color){
+        emptyFields.push('color')
+    }
+    if(!size){
+        emptyFields.push('size')
+    }
+    if(!price){
+        emptyFields.push('price')
+    }
+    if(sale === null || sale === undefined){
+        emptyFields.push('sale')
+    }
+    if(stock === null || stock === undefined){
+        emptyFields.push('stock')
+    }
+    if(emptyFields.length > 0){
+        return res.status(400).json({error: 'Please fill all the fields', emptyFields})
+    }
+
     //Add to the db
     try {
         const product = await Product.create({title, type, color, size, price, sale, stock})
@@ -42,9 +68,44 @@ const addProduct = async (req, res) => {
     }
 }
 
+//Delete a product
+const deleteProduct = async (req, res) => {
+    const {id} = req.params
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(400).json({error: "No such product"})
+    }
+    
+    const product = await Product.findByIdAndDelete({_id: id})
+    if(!product){
+        return res.status(400).json({error: "No such product"})
+    }
+    res.status(200).json({message: 'Product has been deleted'})
+}
+
+//Update a product
+const updateProduct = async (req, res) => {
+    const {id} = req.params
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(400).json({error: "No such product"})
+    }
+
+    const {title, type, color, size, price, sale, stock} = req.body
+    const product = await Product.findOneAndUpdate(
+        {_id: id},
+        {title, type, color, size, price, sale, stock},
+        {new: true, runValidators: true}
+    )
+
+    if(!product){
+        return res.status(400).json({error: "No such product"})
+    }
+    res.status(200).json({message: "Product has been updated"})
+}
 
 module.exports = {
     getProducts,
     getOneProduct,
     addProduct,
+    deleteProduct,
+    updateProduct
 }
