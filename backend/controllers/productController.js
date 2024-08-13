@@ -1,7 +1,7 @@
 //This file stores the functions that'll the job needed
 
-//Import workout Modal
-const Product = require('../models/ProductModal.js')
+//Import product Modal
+const Product = require('../models/ProductModel.js')
 const mongoose = require('mongoose')
 
 
@@ -26,17 +26,17 @@ const getOneProduct = async (req, res) => {
         return res.status(400).json({error: 'No such product'})
     }
 
-    res.status(200).json(workout)
+    res.status(200).json(product)
 }
 
-//Create a new workout
-const addWorkout = async (req, res) => {
+//Create a new product
+const addProduct = async (req, res) => {
     const {title, type, color, size, price, sale, stock} = req.body
 
     //Add to the db
     try {
-        const product = await Workout.create({title, type, color, size, price, sale, stock})
-        res.status(200).json(workout)
+        const product = await Product.create({title, type, color, size, price, sale, stock})
+        res.status(200).json(product)
     } catch(error){
         res.status(400).json({error: error.message})
     }
@@ -46,5 +46,5 @@ const addWorkout = async (req, res) => {
 module.exports = {
     getProducts,
     getOneProduct,
-    addWorkout,
+    addProduct,
 }
