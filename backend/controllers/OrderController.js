@@ -29,7 +29,7 @@ const getOneOrder = async (req, res) => {
     res.status(200).json(order)
 }
 
-//create a new order
+//create a new order => We gotta check if the product rlly exist
 const addOrder = async (req, res) => {
     const {products, name_client, num_tel, wilaya, commune, total_price} = req.body
 
@@ -65,8 +65,45 @@ const addOrder = async (req, res) => {
     }
 }
 
+//Delete a order
+const deleteOrder = async (req, res) => {
+    const {id} = req.params
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(400).json({error: "No such order"})
+    }
+    
+    const order = await Order.findByIdAndDelete({_id: id})
+    if(!order){
+        return res.status(400).json({error: "No such order"})
+    }
+    res.status(200).json({message: 'Order has been deleted'})
+}
+
+//Update a order => We gotta check if the product rlly exist
+const updateOrder = async (req, res) => {
+    const {id} = req.params
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(400).json({error: "No such order"})
+    }
+
+    const {products, name_client, num_tel, wilaya, commune, total_price} = req.body
+    const order = await Order.findOneAndUpdate(
+        {_id: id},
+        {products, name_client, num_tel, wilaya, commune, total_price},
+        {new: true, runValidators: true}
+    )
+
+    if(!order){
+        return res.status(400).json({error: "No such order"})
+    }
+    res.status(200).json({message: "Order has been updated"})
+}
+
+
 module.exports = {
     getOrders,
     getOneOrder,
-    addOrder
+    addOrder,
+    deleteOrder,
+    updateOrder
 }
