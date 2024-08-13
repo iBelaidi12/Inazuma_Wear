@@ -5,6 +5,7 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const productRoutes = require('./routes/product')
+const orderRoutes = require('./routes/orders')
 
 const app = express()
 
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
 //Attaching productRoutes to the app
 //When a req is made to the 1st argument => use productRoutes
 app.use('/api/product/', productRoutes)
+
+app.use('/api/order/', orderRoutes)
 
 //Connect to db & Listen for requests
 mongoose.connect(process.env.MONG_URI)

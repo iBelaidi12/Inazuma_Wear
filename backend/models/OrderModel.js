@@ -1,15 +1,15 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const orderModal = new Schema = ({
-    product: [
+const orderModel = new Schema({
+    products: [
         {
             id_product: {
-                type: ObjectId,
+                type: Schema.Types.ObjectId,
                 required: true
             },
             qte: {
-                type: number,
+                type: Number,
                 min: 1,
                 required: true,
             }
@@ -33,9 +33,9 @@ const orderModal = new Schema = ({
         required: true
     },
     total_price: {
-        type: number,
+        type: Number,
         required: true
     }
 }, {timestamps: true})
 
-module.exports = mongoose.model('Order', orderModal)
+module.exports = mongoose.model('Order', orderModel)
